@@ -87,6 +87,7 @@ jobs:
           macos-app-version: 1.1.7.1
           linux-icon: ./img/favicon.ico
 
+
       - name: Package (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
