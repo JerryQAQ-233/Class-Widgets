@@ -204,7 +204,7 @@ jobs:
 
       - name: Package (Debian)
         run: |
-          cp -R build/main.dist ClassWidgets
+          cp -R main.dist ClassWidgets
           zip -r -q zip/ClassWidgets-Debian10.zip ClassWidgets
 
       - name: Upload
