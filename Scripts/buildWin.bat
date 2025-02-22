@@ -6,7 +6,7 @@ echo 安装依赖
 uv pip install -r requirements.txt
 uv pip install nuitka imageio
 echo 打包
-nuitka main.py ^
+python -m nuitka main.py ^
 --enable-plugin=pyqt5 ^
 --disable-console ^
 --mode=app ^
@@ -24,3 +24,5 @@ nuitka main.py ^
 --include-data-dir=audio=audio ^
 --include-data-files=LICENSE=LICENSE ^
 --include-package=pyttsx3.drivers
+
+ren main ClassWidgets

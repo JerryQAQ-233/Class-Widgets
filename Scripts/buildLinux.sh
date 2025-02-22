@@ -3,7 +3,7 @@ uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
 uv pip install nuitka imageio
-nuitka main.py \
+python -m nuitka main.py \
 --enable-plugin=pyqt5 \
 --mode=app \
 -o"ClassWidgets" \
@@ -16,3 +16,5 @@ nuitka main.py \
 --include-data-dir=audio=audio \
 --include-data-files=LICENSE=LICENSE \
 --include-package=pyttsx3.drivers
+
+mv main ClassWidgets
