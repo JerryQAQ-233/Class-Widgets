@@ -16,5 +16,3 @@ python -m nuitka main.py \
 --include-data-dir=audio=audio \
 --include-data-files=LICENSE=LICENSE \
 --include-package=pyttsx3.drivers
-
-mv main ClassWidgets
