@@ -159,27 +159,27 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           python-version: 3.8.10
-      - name: Run Linux (Debian 10) build
-        shell: bash
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+      - name: Build
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          script-name: main.py
+          enable-plugins: pyqt5
+          include-data-files: LICENSE=LICENSE
+          include-data-dir: |
+            audio=audio
+            config=config
+            font=font
+            img=img
+            plugins=plugins
+            ui=ui
+            view=view
+          include-package: pyttsx3.drivers
+          linux-icon: ./img/favicon.ico
+
+      - name: Package (Debian)
         run: |
-          mkdir zip
-          uv venv
-          source .venv/bin/activate
-          uv pip install -r requirements.txt
-          uv pip install pyinstaller
-          pyinstaller main.py \
-            -w \
-            -n ClassWidgets \
-            --contents-directory . \
-            --add-data config:config \
-            --add-data audio:audio \
-            --add-data img:img \
-            --add-data ui:ui \
-            --add-data font:font \
-            --add-data view:view \
-            --add-data LICENSE:. \
-            --add-data plugins:plugins \
-            --hidden-import darkdetect
           zip -r -q zip/ClassWidgets-Debian10.zip dist/ClassWidgets/*
 
       - name: Upload
