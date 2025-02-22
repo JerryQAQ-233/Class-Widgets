@@ -42,8 +42,11 @@ jobs:
         with:
           python-version: '3.8.10'
           architecture: ${{ matrix.arch }}
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v4
+          cache: 'pip'
+          cache-dependency-path: |
+            **/requirements*.txt
+      # - name: Setup uv
+      #   uses: astral-sh/setup-uv@v4
       # - name: Setup upx (win32)
       #   if: ${{ matrix.os == 'windows-latest' && matrix.arch == 'x86' }}
       #   run: |
@@ -58,24 +61,49 @@ jobs:
       #     ren upx-4.2.4-win64 upx
       - name: Init zip folder
         run: mkdir zip
-      - name: Run Windows build
+
+      - name: Build
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          script-name: main.py
+          enable-plugins: pyqt5
+          include-data-files: LICENSE=LICENSE
+          include-data-dir: |
+            audio=audio
+            config=config
+            font=font
+            img=img
+            plugins=plugins
+            ui=ui
+            view=view
+          include-package: pyttsx3.drivers
+          disable-console: true
+          product-name: Class Widgets
+          file-version: 1.1.7.1
+          windows-icon-from-ico: ./img/favicon.ico
+          macos-app-icon: ./img/favicon.icns
+          macos-signed-appname: cn.rinlit.classwidgets
+          macos-app-name: Class Widgets
+          macos-app-version: 1.1.7.1
+          linux-icon: ./img/favicon.ico
+
+      - name: Package (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
-          ./Scripts/buildWin.bat
+        #   ./Scripts/buildWin.bat
           ./zip -r -q "./zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
-      - name: Run Linux build
+      - name: Package (Linux)
         if: ${{ matrix.os == 'ubuntu-20.04' }}
         run: |
-          bash Scripts/buildLinux.sh
-          cd dist
+        #   bash Scripts/buildLinux.sh
           zip -r -q ./zip/ClassWidgets-Ubuntu20.04.zip ClassWidgets
 
-      - name: Run macOS build
+      - name: Package (macOS)
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-          bash Scripts/buildOSX.sh
+        #   bash Scripts/buildOSX.sh
           zip -r -q "./zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets.app
 
       - name: Upload unsigned application
