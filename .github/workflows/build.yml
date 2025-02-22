@@ -2,7 +2,8 @@ name: 构建
 
 on:
   push:
-    main:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
