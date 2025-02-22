@@ -162,7 +162,7 @@ jobs:
       - name: Build
         run: |
           uv venv
-          source .venv/bin/activate
+          . .venv/bin/activate
           uv pip install -r requirements.txt
           uv pip install nuitka
           python -m nuitka main.py \
