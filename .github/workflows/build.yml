@@ -58,6 +58,7 @@ jobs:
         with:
           mode: standalone
           script-name: main.py
+          output-file: ClassWidgets
           enable-plugins: pyqt5
           include-data-files: LICENSE=LICENSE
           include-data-dir: |
@@ -100,7 +101,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
-          xcopy build/main.dist ClassWidgets /e/y
+          xcopy build\main.dist ClassWidgets /e/y
           ./zip -r -q "./zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Package (Linux)
@@ -112,7 +113,7 @@ jobs:
       - name: Package (macOS)
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-          mv main.app Class\ Widgets.app
+          cp -R build/main.app Class\ Widgets.app
           zip -r -q "./zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets.app
 
       - name: Upload unsigned application
