@@ -159,24 +159,25 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           python-version: 3.8.10
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
       - name: Build
-        uses: Nuitka/Nuitka-Action@main
-        with:
-          script-name: main.py
-          enable-plugins: pyqt5
-          include-data-files: LICENSE=LICENSE
-          include-data-dir: |
-            audio=audio
-            config=config
-            font=font
-            img=img
-            plugins=plugins
-            ui=ui
-            view=view
-          include-package: pyttsx3.drivers
-          linux-icon: ./img/favicon.ico
+        run: |
+          uv venv
+          source .venv/bin/activate
+          uv pip install -r requirements.txt
+          uv pip install nuitka
+          python -m nuitka main.py \
+            --enable-plugin=pyqt5 \
+            --mode=app \
+            -o"ClassWidgets" \
+            --include-data-dir=img=img \
+            --include-data-dir=ui=ui \
+            --include-data-dir=view=view \
+            --include-data-dir=config=config \
+            --include-data-dir=plugins=plugins \
+            --include-data-dir=font=font \
+            --include-data-dir=audio=audio \
+            --include-data-files=LICENSE=LICENSE \
+            --include-package=pyttsx3.drivers
 
       - name: Package (Debian)
         run: |
