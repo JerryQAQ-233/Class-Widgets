@@ -101,7 +101,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
-          xcopy build\main.dist ClassWidgets /e/y
+          xcopy build\main.dist\* ClassWidgets\ /e/y
           ./zip -r -q "./zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Package (Linux)
@@ -139,7 +139,7 @@ jobs:
           signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
-          output-artifact-directory: './ClassWidgets'
+          output-artifact-directory: '.\ClassWidgets'
       - name: Sign application (Release)
         if: ${{ matrix.os == 'windows-latest' && startsWith(github.ref, 'refs/tags/') }}
         uses: signpath/github-action-submit-signing-request@v1.1
@@ -150,7 +150,7 @@ jobs:
           signing-policy-slug: 'release-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
-          output-artifact-directory: './ClassWidgets'
+          output-artifact-directory: '.\ClassWidgets'
       - name: Recompress
         if: ${{ matrix.os == 'windows-latest' && github.event_name != 'pull_request' }}
         run: |
@@ -205,6 +205,7 @@ jobs:
       - name: Package (Debian)
         run: |
           cp -R main.dist ClassWidgets
+          mkdir zip
           zip -r -q zip/ClassWidgets-Debian10.zip ClassWidgets
 
       - name: Upload
