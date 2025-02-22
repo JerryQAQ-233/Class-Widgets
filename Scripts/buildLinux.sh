@@ -2,18 +2,17 @@
 uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
-uv pip install pyinstaller
-pyinstaller main.py \
-  -w \
-  -i ./img/favicon.ico \
-  -n ClassWidgets \
-  --contents-directory . \
-  --add-data config:config \
-  --add-data audio:audio \
-  --add-data img:img \
-  --add-data ui:ui \
-  --add-data font:font \
-  --add-data view:view \
-  --add-data LICENSE:. \
-  --add-data plugins:plugins \
-  --hidden-import darkdetect
+uv pip install nuitka imageio
+nuitka main.py \
+--enable-plugin=pyqt5 \
+--mode=app \
+-o"ClassWidgets" \
+--include-data-dir=img=img \
+--include-data-dir=ui=ui \
+--include-data-dir=view=view \
+--include-data-dir=config=config \
+--include-data-dir=plugins=plugins \
+--include-data-dir=font=font \
+--include-data-dir=audio=audio \
+--include-data-files=LICENSE=LICENSE \
+--include-package=pyttsx3.drivers

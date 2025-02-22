@@ -2,18 +2,24 @@
 uv venv
 source .venv/bin/activate
 uv pip install -r requirements.txt
-uv pip install pyinstaller
-pyinstaller main.py \
--w \
--i ./img/favicon.icns \
--n "Class Widgets" \
---contents-directory . \
---add-data config:config \
---add-data audio:audio \
---add-data img:img \
---add-data ui:ui \
---add-data font:font \
---add-data view:view \
---add-data LICENSE:. \
---add-data plugins:plugins \
---hidden-import darkdetect
+uv pip install nuitka imageio
+nuitka main.py \
+--enable-plugin=pyqt5 \
+--mode=app \
+-o"ClassWidgets" \
+--macos-create-app-bundle \
+--macos-app-icon=img/favicon.icns \
+--product-name="Class Widgets" \
+--product-version="1.1.7.1" \
+--file-description="全新桌面课表" \
+--include-data-dir=img=img \
+--include-data-dir=ui=ui \
+--include-data-dir=view=view \
+--include-data-dir=config=config \
+--include-data-dir=plugins=plugins \
+--include-data-dir=font=font \
+--include-data-dir=audio=audio \
+--include-data-files=LICENSE=LICENSE \
+--include-package=pyttsx3.drivers
+
+mv main.app Class\ Widgets.app

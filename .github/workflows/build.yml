@@ -62,23 +62,20 @@ jobs:
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
           ./Scripts/buildWin.bat
-          cd dist
-          ../zip -r -q "../zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
+          ./zip -r -q "./zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Run Linux build
         if: ${{ matrix.os == 'ubuntu-20.04' }}
         run: |
           bash Scripts/buildLinux.sh
           cd dist
-          zip -r -q ../zip/ClassWidgets-Ubuntu20.04.zip ClassWidgets
+          zip -r -q ./zip/ClassWidgets-Ubuntu20.04.zip ClassWidgets
 
       - name: Run macOS build
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
           bash Scripts/buildOSX.sh
-          cd dist
-          zip -r -q "../zip/Class Widgets-macOS-${{ matrix.arch }} (bundle).zip" Class\ Widgets.app
-          zip -r -q "../zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets
+          zip -r -q "./zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets.app
 
       - name: Upload unsigned application
         if: ${{ ( matrix.os != 'windows-latest' && github.event_name != 'pull_request' ) || github.event_name == 'pull_request' }}
@@ -92,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v4.4.2
         with:
           name: windows-${{ matrix.arch }} (Unsigned single)
-          path: ./dist/ClassWidgets/ClassWidgets.exe
+          path: ./ClassWidgets/ClassWidgets.exe
       - name: Sign application (Test)
         if: ${{ matrix.os == 'windows-latest' && github.event_name != 'pull_request' }}
         uses: signpath/github-action-submit-signing-request@v1.1
@@ -103,7 +100,7 @@ jobs:
           signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
-          output-artifact-directory: './dist/ClassWidgets'
+          output-artifact-directory: './ClassWidgets'
       - name: Sign application (Release)
         if: ${{ matrix.os == 'windows-latest' && startsWith(github.ref, 'refs/tags/') }}
         uses: signpath/github-action-submit-signing-request@v1.1
@@ -114,12 +111,12 @@ jobs:
           signing-policy-slug: 'release-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
-          output-artifact-directory: './dist/ClassWidgets'
+          output-artifact-directory: './ClassWidgets'
       - name: Recompress
         if: ${{ matrix.os == 'windows-latest' && github.event_name != 'pull_request' }}
         run: |
           del "zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip"
-          ./zip -r -q zip/ClassWidgets-Windows-${{ matrix.arch }}.zip dist/ClassWidgets/*
+          ./zip -r -q zip/ClassWidgets-Windows-${{ matrix.arch }}.zip ClassWidgets
       - name: Upload signed application
         if: ${{ matrix.os == 'windows-latest' && github.event_name != 'pull_request' }}
         uses: actions/upload-artifact@v4.4.2

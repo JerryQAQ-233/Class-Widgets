@@ -1,22 +1,26 @@
 @echo off
 echo 创建虚拟环境
 uv venv
-call .venv\Scripts\activate
+call .venv^Scripts^activate
 echo 安装依赖
 uv pip install -r requirements.txt
-uv pip install pyinstaller
+uv pip install nuitka imageio
 echo 打包
-pyinstaller main.py ^
-  -w ^
-  -i ./img/favicon.ico ^
-  -n ClassWidgets ^
-  --contents-directory . ^
-  --add-data config:config ^
-  --add-data audio:audio ^
-  --add-data img:img ^
-  --add-data ui:ui ^
-  --add-data font:font ^
-  --add-data view:view ^
-  --add-data LICENSE:. ^
-  --add-data plugins:plugins ^
-  --hidden-import darkdetect
+nuitka main.py ^
+--enable-plugin=pyqt5 ^
+--disable-console ^
+--mode=app ^
+-o"ClassWidgets" ^
+--windows-icon-from-ico=img/favicon.icns ^
+--product-name="Class Widgets" ^
+--product-version="1.1.7.1" ^
+--file-description="全新桌面课表" ^
+--include-data-dir=img=img ^
+--include-data-dir=ui=ui ^
+--include-data-dir=view=view ^
+--include-data-dir=config=config ^
+--include-data-dir=plugins=plugins ^
+--include-data-dir=font=font ^
+--include-data-dir=audio=audio ^
+--include-data-files=LICENSE=LICENSE ^
+--include-package=pyttsx3.drivers
