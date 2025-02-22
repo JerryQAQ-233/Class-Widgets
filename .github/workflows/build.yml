@@ -45,20 +45,7 @@ jobs:
           cache: 'pip'
           cache-dependency-path: |
             **/requirements*.txt
-      # - name: Setup uv
-      #   uses: astral-sh/setup-uv@v4
-      # - name: Setup upx (win32)
-      #   if: ${{ matrix.os == 'windows-latest' && matrix.arch == 'x86' }}
-      #   run: |
-      #     curl -o upx.zip -L https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-win32.zip
-      #     tar -xvzf upx.zip
-      #     ren upx-4.2.4-win32 upx
-      # - name: Setup upx (win64)
-      #   if: ${{ matrix.os == 'windows-latest' && matrix.arch == 'x64' }}
-      #   run: |
-      #     curl -o upx.zip -L https://github.com/upx/upx/releases/download/v4.2.4/upx-4.2.4-win64.zip
-      #     tar -xvzf upx.zip
-      #     ren upx-4.2.4-win64 upx
+      
       - name: Init zip folder
         run: mkdir zip
 
@@ -92,19 +79,16 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           curl -o zip.exe -L http://www.stahlworks.com/dev/zip.exe
-        #   ./Scripts/buildWin.bat
           ./zip -r -q "./zip/ClassWidgets-Windows-${{ matrix.arch }} (Unsigned).zip" ClassWidgets
 
       - name: Package (Linux)
         if: ${{ matrix.os == 'ubuntu-20.04' }}
         run: |
-        #   bash Scripts/buildLinux.sh
           zip -r -q ./zip/ClassWidgets-Ubuntu20.04.zip ClassWidgets
 
       - name: Package (macOS)
         if: ${{ startsWith(matrix.os, 'macos') }}
         run: |
-        #   bash Scripts/buildOSX.sh
           zip -r -q "./zip/Class Widgets-macOS-${{ matrix.arch }}.zip" Class\ Widgets.app
 
       - name: Upload unsigned application
