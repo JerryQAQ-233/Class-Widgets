@@ -2,7 +2,6 @@
 #  System           platform value
 # ---------------------------------
 #  Windows          "win32"
-#  macOS            "darwin"
 # ---------------------------------
 certifi==2024.8.30
 charset-normalizer==3.3.2
