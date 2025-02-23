@@ -81,6 +81,7 @@ jobs:
         with:
           script-name: main.py
           enable-plugins: pyqt5
+          output-file: ClassWidgets
           include-data-files: LICENSE=LICENSE
           include-data-dir: |
             audio=audio
