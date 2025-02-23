@@ -70,6 +70,7 @@ jobs:
             ui=ui
             view=view
           include-package: pyttsx3.drivers
+          include-package: comtypes.stream
           disable-console: true
           product-name: Class Widgets
           file-version: 1.1.7.1
